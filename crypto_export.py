@@ -111,67 +111,67 @@ if 'coinbase' in queued_exchanges:
             coinbase_accounts = json.load(infile)
     else:
         print("Getting Coinbase account list via API")
-        coinbase_accounts = coinbase_client.get_accounts(order='asc', limit=100)
+        coinbase_accounts = coinbase_client.get_accounts()
 
         for i, account in enumerate(coinbase_accounts["data"]):
             print("- #%d %s: %s %s available (currently %s %s)" % (i, account['id'], account['balance'], account['currency'], account['native_balance']['amount'], account['native_balance']['currency']))
 
             print("--- Getting transactions via API")
-            coinbase_accounts['data'][i]['transactions'] = coinbase_client.get_transactions(account['id'], order='asc', limit=100)
+            coinbase_accounts['data'][i]['transactions'] = coinbase_client.get_transactions(account['id'])
             pagination = coinbase_accounts['data'][i]['transactions'].pagination
             page = 2
             while pagination != None and pagination['next_uri'] != None:
                 print("--- Getting transactions via API (page %d)" % page)
                 starting_after_guid = re.search('starting_after=([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})', pagination.next_uri, re.I).group(1)
-                next_page = coinbase_client.get_transactions(account['id'], order='asc', limit=100, starting_after=starting_after_guid)
+                next_page = coinbase_client.get_transactions(account['id'], starting_after=starting_after_guid)
                 coinbase_accounts['data'][i]['transactions']['data'] = coinbase_accounts['data'][i]['transactions']['data'] + next_page['data']
                 pagination = next_page.pagination
                 page = page + 1
 
             print("--- Getting buys via API")
-            coinbase_accounts['data'][i]['buys'] = coinbase_client.get_buys(account['id'], order='asc', limit=100)
+            coinbase_accounts['data'][i]['buys'] = coinbase_client.get_buys(account['id'])
             pagination = coinbase_accounts['data'][i]['buys'].pagination
             page = 2
             while pagination != None and pagination['next_uri'] != None:
                 print("--- Getting buys via API (page %d)" % page)
                 starting_after_guid = re.search('starting_after=([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})', pagination.next_uri, re.I).group(1)
-                next_page = coinbase_client.get_buys(account['id'], order='asc', limit=100, starting_after=starting_after_guid)
+                next_page = coinbase_client.get_buys(account['id'], starting_after=starting_after_guid)
                 coinbase_accounts['data'][i]['buys']['data'] = coinbase_accounts['data'][i]['buys']['data'] + next_page['data']
                 pagination = next_page.pagination
                 page = page + 1
 
             print("--- Getting sells via API")
-            coinbase_accounts['data'][i]['sells'] = coinbase_client.get_sells(account['id'], order='asc', limit=100)
+            coinbase_accounts['data'][i]['sells'] = coinbase_client.get_sells(account['id'])
             pagination = coinbase_accounts['data'][i]['sells'].pagination
             page = 2
             while pagination != None and pagination['next_uri'] != None:
                 print("--- Getting sells via API (page %d)" % page)
                 starting_after_guid = re.search('starting_after=([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})', pagination.next_uri, re.I).group(1)
-                next_page = coinbase_client.get_sells(account['id'], order='asc', limit=100, starting_after=starting_after_guid)
+                next_page = coinbase_client.get_sells(account['id'], starting_after=starting_after_guid)
                 coinbase_accounts['data'][i]['sells']['data'] = coinbase_accounts['data'][i]['sells']['data'] + next_page['data']
                 pagination = next_page.pagination
                 page = page + 1
 
             print("--- Getting deposits via API")
-            coinbase_accounts['data'][i]['deposits'] = coinbase_client.get_deposits(account['id'], order='asc', limit=100)
+            coinbase_accounts['data'][i]['deposits'] = coinbase_client.get_deposits(account['id'])
             pagination = coinbase_accounts['data'][i]['deposits'].pagination
             page = 2
             while pagination != None and pagination['next_uri'] != None:
                 print("--- Getting deposits via API (page %d)" % page)
                 starting_after_guid = re.search('starting_after=([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})', pagination.next_uri, re.I).group(1)
-                next_page = coinbase_client.get_deposits(account['id'], order='asc', limit=100, starting_after=starting_after_guid)
+                next_page = coinbase_client.get_deposits(account['id'], starting_after=starting_after_guid)
                 coinbase_accounts['data'][i]['deposits']['data'] = coinbase_accounts['data'][i]['deposits']['data'] + next_page['data']
                 pagination = next_page.pagination
                 page = page + 1
 
             print("--- Getting withdrawals via API")
-            coinbase_accounts['data'][i]['withdrawals'] = coinbase_client.get_withdrawals(account['id'], order='asc', limit=100)
+            coinbase_accounts['data'][i]['withdrawals'] = coinbase_client.get_withdrawals(account['id'])
             pagination = coinbase_accounts['data'][i]['withdrawals'].pagination
             page = 2
             while pagination != None and pagination['next_uri'] != None:
                 print("--- Getting withdrawals via API (page %d)" % page)
                 starting_after_guid = re.search('starting_after=([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})', pagination.next_uri, re.I).group(1)
-                next_page = coinbase_client.get_withdrawals(account['id'], order='asc', limit=100, starting_after=starting_after_guid)
+                next_page = coinbase_client.get_withdrawals(account['id'], starting_after=starting_after_guid)
                 coinbase_accounts['data'][i]['withdrawals']['data'] = coinbase_accounts['data'][i]['withdrawals']['data'] + next_page['data']
                 pagination = next_page.pagination
                 page = page + 1
